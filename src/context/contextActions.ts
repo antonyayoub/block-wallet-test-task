@@ -4,6 +4,7 @@ import { IAppState } from "./background/InitialState";
 enum Actions {
   SET_TRANSACTIONS = "SET_TRANSACTIONS",
   SET_STATE = "SET_STATE",
+  SET_BALANCE = "SET_BALANCE",
 }
 
 export interface SetTransactionAction {
@@ -14,6 +15,11 @@ export interface SetTransactionAction {
 export interface SetStateAction {
   type: Actions.SET_STATE;
   payload: Partial<IAppState>;
+}
+
+export interface SetBalance {
+  type: Actions.SET_BALANCE;
+  payload: number;
 }
 
 export default Actions;
