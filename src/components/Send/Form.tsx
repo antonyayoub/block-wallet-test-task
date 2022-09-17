@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import {Link} from 'react-router-dom';
+import { Link , useNavigate} from 'react-router-dom';
 import { useContext } from "react";
 
 import AppContext from "../../context/background/AppContext";
@@ -13,11 +13,13 @@ type FormData = {
 
 const Form = () => {
   const { state, setState, addTransaction } = useContext(AppContext);
+  const navigate = useNavigate();
 
   const { register, setValue, handleSubmit, formState: { errors } } = useForm<FormData>();
   const onSubmit = handleSubmit( async (data) => {
-    const transaction = {to:data.to, value:data.amount, date: new Date(), from: defaults.publicAddress}
+    const transaction = {to:data.to, value:data.amount, date: new Date(), from: defaults.publicAddress};
     await addTransaction(transaction);
+    navigate('/send-success');
   });
 
   return (
@@ -30,13 +32,22 @@ const Form = () => {
                   {/* To Field */}
                   <div className="flex flex-col space-y-1">
                     <label htmlFor="to" className="text-sm text-slate-500 font-medium">Add Recipient</label>
-                    <input type="text" id="to" className="border-b-2 border-black py-2 focus:outline-none focus:border-slate-500 text-sm" placeholder='Enter Public Address' {...register("to")} onChange={(e)=>setValue("to",e.target.value)} />
+                    <input type="text" id="to" className="border-b-2 border-black py-2 focus:outline-none focus:border-slate-500 text-sm" placeholder='Enter Public Address' {...register("to", { required: true , pattern: /^0x[a-fA-F0-9]{40}$/ })} onChange={(e)=>setValue("to",e.target.value)} />
+                    <div className="text-xs text-red-400">
+                      {errors.to?.type === 'required' && "Recipient public address is required"}
+                      {errors.to?.type === 'pattern' && "Recipient public address is invalid"}
+                    </div>
                   </div>
 
                   {/* Amount Field */}
                   <div className="flex flex-col space-y-1">
                     <label htmlFor="amount" className="text-sm text-slate-500 font-medium">Amount To Transfer</label>
-                    <input type="number" id="amount" className="border-b-2 border-black py-2 w-1/2 focus:outline-none focus:border-slate-500 text-sm" placeholder='Enter ETH Amount' {...register("amount")} onChange={(e)=>setValue("amount",+e.target.value)}/>
+                    <input type="number" id="amount" className="border-b-2 border-black py-2 w-1/2 focus:outline-none focus:border-slate-500 text-sm" placeholder='Enter ETH Amount' {...register("amount", {required: true , min: 1, max: state.balance})} onChange={(e)=>setValue("amount",+e.target.value)}/>
+                    <div className="text-xs text-red-400">
+                      {errors.amount?.type === 'required' && "ETH amount is required"}
+                      {errors.amount?.type === 'min' && "Minimum amount is 1 ETH"}
+                      {errors.amount?.type === 'max' && "Insufficient ETH balance"}
+                    </div>
                   </div>
                 </div>
               </form>
@@ -49,9 +60,7 @@ const Form = () => {
           </Link>
         </div>
         <div className="w-1/2">
-          <Link to='/send-success'>
-            <button className="text-white py-3 px-10 rounded font-bold text-sm border-BackgroundNextButton border-2 bg-BackgroundNextButton w-full hover:font-extrabold" onClick={()=> onSubmit() }>Next</button>
-          </Link>
+          <button className="text-white py-3 px-10 rounded font-bold text-sm border-BackgroundNextButton border-2 bg-BackgroundNextButton w-full hover:font-extrabold" onClick={()=> onSubmit() }>Next</button>
         </div>
       </div>
 
