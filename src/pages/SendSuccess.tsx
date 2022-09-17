@@ -1,6 +1,7 @@
 import {Link} from 'react-router-dom';
 
 import successIcon from "../assets/img/icons/checkmark_notes.svg";
+import defaults from '../utils/constants';
 
 const SendSuccess = () => {
   return (
@@ -12,7 +13,7 @@ const SendSuccess = () => {
               <img src={successIcon} alt="" className="w-30 h-30" />
               <p className="font-bold text-2xl">Success.</p>
               <p className="text-md text-slate-500 px-20 text-center">You've successfully sent your funds.</p>
-              <a href='https://etherscan.io/' target='_blank' rel="noreferrer">
+              <a href={`https://etherscan.io/address/${defaults.publicAddress}`} target='_blank' rel="noreferrer">
                 <p  className='text-md text-blue-600'>
                   View on Etherscan
                 </p> 

@@ -23,7 +23,7 @@ const TransactionDetails = ({transaction}: TransactionProps) => {
         </div>
           <div className='flex flex-col items-end'>
             <h4 className="text-md font-medium">-{transaction.value} ETH</h4>
-            <p className="text-xs text-slate-500">-${transaction.value * defaults.ethPrice } USD</p>
+            <p className="text-xs text-slate-500">-${(transaction.value * defaults.ethPrice).toFixed(2) } USD</p>
           </div>
         </div>    
     </>

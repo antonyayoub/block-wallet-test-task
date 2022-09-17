@@ -31,6 +31,10 @@ const AppState = (props: any) => {
       type: Actions.SET_TRANSACTIONS,
       payload: currentTransactions
     });
+    dispatch({
+      type: Actions.SET_BALANCE,
+      payload: defaults.accountBalance
+    });
   };
 
   useEffect(() => {
@@ -48,6 +52,10 @@ const AppState = (props: any) => {
   // TODO: Complete the addTransaction method
   const addTransaction = async (transaction: Omit<Transaction,"id">) => {
     await transactionsService.addTransaction(transaction);
+    dispatch({
+      type: Actions.SET_BALANCE,
+      payload: state.balance - transaction.value
+    });
     const currentTransactions = await transactionsService.getListOfTransactions()  
     dispatch({
       type: Actions.SET_TRANSACTIONS,
