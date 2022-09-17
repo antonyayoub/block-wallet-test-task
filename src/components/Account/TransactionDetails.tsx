@@ -1,6 +1,7 @@
 import ETHIcon from '../../assets/img/icons/ETH.svg';
 import { Transaction } from '../../services/TransactionsService';
 import defaults from '../../utils/constants';
+import moment from 'moment';
 
 interface TransactionProps {
   transaction: Omit<Transaction,"id">;
@@ -17,7 +18,7 @@ const TransactionDetails = ({transaction}: TransactionProps) => {
           </div>
           <div>
             <h4 className="text-md font-medium">Sent Ether</h4>
-            <p className="text-xs text-slate-500">{`${transaction.date.toISOString().split("T")[0]} ${transaction.date.toISOString().split("T")[1].split(":")[0]}:${transaction.date.toISOString().split("T")[1].split(":")[1]}`}</p>
+            <p className="text-xs text-slate-500">{`${moment(new Date()).format('DD-MM-YYYY hh:mm')}`}</p>
           </div>
         </div>
           <div className='flex flex-col items-end'>
